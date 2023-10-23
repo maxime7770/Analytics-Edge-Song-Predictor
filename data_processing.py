@@ -1,8 +1,10 @@
 import pandas as pd
 import numpy as np
+import pickle
 from sentence_transformers import SentenceTransformer
 from sklearn.cluster import KMeans, DBSCAN
 from tqdm import tqdm
+
 
 data = pd.read_csv('data/spotify_data.csv')
 
@@ -53,6 +55,16 @@ def compute_embeddings(data):
     model = SentenceTransformer('sentence-transformers/all-MiniLM-L6-v2')
     for sentence in tqdm(data):
         embeddings.append(model.encode(sentence))
+
+    # store the embeddings along with the track names
+    embeddings = np.array(embeddings)
+    dict_embeddings = {}
+    for i in range(len(data)):
+        dict_embeddings[data[i]] = embeddings[i]
+    # store in a pickle file
+    with open('data/embeddings.pkl', 'wb') as f:
+        pickle.dump(dict_embeddings, f)
+    
     return embeddings
 
 def get_labels(data):
@@ -65,8 +77,17 @@ def get_labels(data):
     labels = kmeans.labels_
     return labels
 
+compute_embeddings(data['track_name'])
+
 # Add labels to the data for tracks names
-data['labels'] = get_labels(data['track_name'])
-data = data.drop(['track_name'], axis=1)
+# data['labels'] = get_labels(data['track_name'])
+# data = data.drop(['track_name'], axis=1)
     
-    
+
+
+def load_embeddings():
+    ''' Load the embeddings from the pickle file '''
+    with open('data/embeddings.pkl', 'rb') as f:
+        embeddings = pickle.load(f)
+    return embeddings
+
