@@ -3,6 +3,7 @@ import numpy as np
 import pickle
 from sentence_transformers import SentenceTransformer
 from sklearn.cluster import KMeans, DBSCAN
+from sklearn.model_selection import train_test_split
 from tqdm import tqdm
 
 
@@ -92,3 +93,9 @@ def load_embeddings():
         embeddings = pickle.load(f)
     return embeddings
 
+
+
+# split the data into train and test
+train, test = train_test_split(data, test_size=0.2, random_state=0)
+train.to_csv('data/train.csv', index=False)
+test.to_csv('data/test.csv', index=False)
