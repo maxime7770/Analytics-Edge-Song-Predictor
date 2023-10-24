@@ -11,6 +11,7 @@ data = pd.read_csv('data/spotify_data.csv')
 
 # Drop unnecessary columns
 data = data.drop(['Unnamed: 0', 'artist_name', 'track_id', 'year'], axis=1)
+data = data.dropna()
 
 # Categorical variables
 columns_categorical = ['key', 'mode', 'time_signature', 'genre']
