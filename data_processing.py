@@ -13,6 +13,9 @@ data = pd.read_csv('data/spotify_data.csv')
 # Drop unnecessary columns
 data = data.drop(['Unnamed: 0', 'artist_name', 'track_id', 'year'], axis=1)
 data = data.dropna()
+data = data.reset_index(drop=True)
+
+print("Track names count: ", len(data['track_name']))
 
 # Categorical variables
 columns_categorical = ['key', 'mode', 'time_signature', 'genre']
@@ -69,30 +72,30 @@ def compute_embeddings(data):
     
     return embeddings
 
-def get_labels(data):
+
+def load_embeddings():
+    ''' Load the embeddings from the pickle file '''
+    with open('data/embeddings_raw.pkl', 'rb') as f:
+        embeddings = pickle.load(f)
+    return embeddings
+
+
+def get_labels():
     ''' Get labels for each track based on embedding and clusters assignments '''
-    # Compute embeddings
-    embeddings = compute_embeddings(data)
+    # Compute embeddings from the dictionary
+    list_embeddings = load_embeddings()
+    print('Embeddings loaded')
+    print(len(list_embeddings))
     # Cluster embeddings
-    kmeans = KMeans(n_clusters=10, random_state=0).fit(embeddings)
+    kmeans = KMeans(n_clusters=10, random_state=0, verbose=1).fit(list_embeddings)
     # Get labels
     labels = kmeans.labels_
     return labels
 
-compute_embeddings(data['track_name'])
-
 # Add labels to the data for tracks names
-# data['labels'] = get_labels(data['track_name'])
-# data = data.drop(['track_name'], axis=1)
+data['track_name_labels'] = get_labels()
+data = data.drop(['track_name'], axis=1)
     
-
-
-def load_embeddings():
-    ''' Load the embeddings from the pickle file '''
-    with open('data/embeddings.pkl', 'rb') as f:
-        embeddings = pickle.load(f)
-    return embeddings
-
 
 
 # split the data into train and test
