@@ -1,6 +1,10 @@
 import streamlit as st
 import random
+import pickle
 from utils import *
+
+
+xgb_model = pickle.load(open('models_path/xgboost.sav', 'rb'))
 
 st.set_page_config(layout="wide")
 st.title("Song Popularity Predictor")
@@ -12,8 +16,7 @@ expressivity = st.slider("Expressivity (1-100)", 0, 100, 50, 5)
 instrumentalness = st.slider("Instrumentalness (1-100)", 0, 100, 50, 5)
 tempo = st.slider("Tempo (1-100)", 1, 100, 50)
 
-predicted_streams = random.randint(1000, 1000000)
-predicted_popularity = random.randint(1, 5)
+predicted_popularity = xgb_model.predict([[liveliness, expressivity, instrumentalness, tempo]])[0] + 1
 
 st.header("Predictions")
 
