@@ -1,3 +1,5 @@
 streamlit
 xgboost
 lightgbm
+scikit-learn
+sentence-transformers
