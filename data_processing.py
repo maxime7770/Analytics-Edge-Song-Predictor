@@ -23,30 +23,30 @@ print("Track names count: ", len(data['track_name']))
 # data = pd.get_dummies(data, columns=columns_categorical, drop_first=True, dtype=int)
 
 # transform popularity between 0 and 10: if popularity between 0 and 10, then 0, if between 11 and 20, then 1, etc.
-def transform_popularity(popularity):
-    if popularity <= 10:
-        return 1
-    elif popularity <= 20:
-        return 2
-    elif popularity <= 30:
-        return 3
-    elif popularity <= 40:
-        return 4
-    elif popularity <= 50:
-        return 5
-    elif popularity <= 60:
-        return 6
-    elif popularity <= 70:
-        return 7
-    elif popularity <= 80:
-        return 8
-    elif popularity <= 90:
-        return 9
-    elif popularity <= 100:
-        return 10
+# def transform_popularity(popularity):
+#     if popularity <= 10:
+#         return 1
+#     elif popularity <= 20:
+#         return 2
+#     elif popularity <= 30:
+#         return 3
+#     elif popularity <= 40:
+#         return 4
+#     elif popularity <= 50:
+#         return 5
+#     elif popularity <= 60:
+#         return 6
+#     elif popularity <= 70:
+#         return 7
+#     elif popularity <= 80:
+#         return 8
+#     elif popularity <= 90:
+#         return 9
+#     elif popularity <= 100:
+#         return 10
     
-# Apply the function to the popularity column
-data['popularity'] = data['popularity'].apply(transform_popularity)
+# # Apply the function to the popularity column
+# data['popularity'] = data['popularity'].apply(transform_popularity)
 
 print(data.head())
     
@@ -95,6 +95,13 @@ def get_labels():
 # Add labels to the data for tracks names
 data['track_name_labels'] = get_labels()
 data = data.drop(['track_name'], axis=1)
+
+data = data[(data['popularity'] >= 1) & (data['popularity'] <= 40)]
+
+# Create labels ranging from 1 to 10 based on the filtered 'popularity' values
+# We'll divide the range [1, 40] into 10 equal intervals
+data['popularity'] = pd.cut(data['popularity'], bins=10, labels=range(1, 11))
+
 # drop all rows where 'genre_songwriter' is equal to 1
 # data = data[data['genre_songwriter'] == 0]
 # # drop the 'genre_songwriter' column
