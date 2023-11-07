@@ -11,16 +11,16 @@ data = pd.read_csv('data/spotify_data.csv')
 
 
 # Drop unnecessary columns
-data = data.drop(['Unnamed: 0', 'artist_name', 'track_id', 'year'], axis=1)
+data = data.drop(['Unnamed: 0', 'artist_name', 'track_id', 'year', 'genre'], axis=1)
 data = data.dropna()
 data = data.reset_index(drop=True)
 
 print("Track names count: ", len(data['track_name']))
 
 # Categorical variables
-columns_categorical = ['key', 'mode', 'time_signature', 'genre']
-# Convert categorical variables to dummy variables (0 and 1)
-data = pd.get_dummies(data, columns=columns_categorical, drop_first=True, dtype=int)
+# columns_categorical = ['key', 'mode', 'time_signature', 'genre']
+# # Convert categorical variables to dummy variables (0 and 1)
+# data = pd.get_dummies(data, columns=columns_categorical, drop_first=True, dtype=int)
 
 # transform popularity between 0 and 10: if popularity between 0 and 10, then 0, if between 11 and 20, then 1, etc.
 def transform_popularity(popularity):
@@ -96,9 +96,9 @@ def get_labels():
 data['track_name_labels'] = get_labels()
 data = data.drop(['track_name'], axis=1)
 # drop all rows where 'genre_songwriter' is equal to 1
-data = data[data['genre_songwriter'] == 0]
-# drop the 'genre_songwriter' column
-data = data.drop(['genre_songwriter'], axis=1)
+# data = data[data['genre_songwriter'] == 0]
+# # drop the 'genre_songwriter' column
+# data = data.drop(['genre_songwriter'], axis=1)
 
     
 
