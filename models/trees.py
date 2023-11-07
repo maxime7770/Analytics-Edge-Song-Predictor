@@ -11,6 +11,10 @@ from sklearn.metrics import accuracy_score, f1_score, precision_score, recall_sc
 train_data = pd.read_csv('data/train.csv').drop(['track_name_labels'], axis=1)
 test_data = pd.read_csv('data/test.csv').drop(['track_name_labels'], axis=1)
 
+# drop all columns starting with genre_
+train_data = train_data.drop(train_data.columns[train_data.columns.str.startswith('genre_')], axis=1)
+test_data = test_data.drop(test_data.columns[test_data.columns.str.startswith('genre_')], axis=1)
+
 # change 1, 2, 3... to 0, 1, 2...
 train_data['popularity'] = train_data['popularity'] - 1
 test_data['popularity'] = test_data['popularity'] - 1
@@ -30,16 +34,37 @@ def model_xgboost(X_train, y_train):
     xgb = XGBClassifier()
     clf = GridSearchCV(xgb, parameters, cv=5, scoring='accuracy', verbose=1)
     clf.fit(X_train, y_train)
-    print(clf.best_params_)
-    print(clf.best_score_)
     return clf.best_estimator_
 
+def select_xgboost():
+    best_xgb = model_xgboost(train_data.iloc[:, 1:], train_data.iloc[:, 0])
+    # save the model with pickle
+    pickle.dump(best_xgb, open('models_path/xgboost.sav', 'wb'))
+    y_pred = best_xgb.predict(test_data.iloc[:, 1:])
 
-best_xgb = model_xgboost(train_data.iloc[:, 1:], train_data.iloc[:, 0])
-# save the model with pickle
-pickle.dump(best_xgb, open('models_path/xgboost.sav', 'wb'))
-y_pred = best_xgb.predict(test_data.iloc[:, 1:])
+    print('Accuracy: ', accuracy_score(test_data.iloc[:, 0], y_pred))
 
-print('Accuracy: ', accuracy_score(test_data.iloc[:, 0], y_pred))
     
 
+def model_randomforest(X_train, y_train):
+    # parameters = {
+    #     'max_depth': [5, 10],
+    #     'n_estimators': [100, 200],
+    # }
+    # rf = RandomForestClassifier()
+    # clf = GridSearchCV(rf, parameters, cv=5, scoring='accuracy', verbose=1)
+    clf = RandomForestClassifier(max_depth=10, n_estimators=200)
+    clf.fit(X_train, y_train)
+    return clf
+
+def select_randomforest():
+    best_rf = model_randomforest(train_data.iloc[:, 1:], train_data.iloc[:, 0])
+    # save the model with pickle
+    pickle.dump(best_rf, open('models_path/randomforest.sav', 'wb'))
+    y_pred = best_rf.predict(test_data.iloc[:, 1:])
+
+    print('Accuracy: ', accuracy_score(test_data.iloc[:, 0], y_pred))
+
+
+model_randomforest(train_data.iloc[:, 1:], train_data.iloc[:, 0])
+select_randomforest()
