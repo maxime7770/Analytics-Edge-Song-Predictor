@@ -95,10 +95,15 @@ def get_labels():
 # Add labels to the data for tracks names
 data['track_name_labels'] = get_labels()
 data = data.drop(['track_name'], axis=1)
+# drop all rows where 'genre_songwriter' is equal to 1
+data = data[data['genre_songwriter'] == 0]
+# drop the 'genre_songwriter' column
+data = data.drop(['genre_songwriter'], axis=1)
+
     
 
 
 # split the data into train and test
-train, test = train_test_split(data, test_size=0.2, random_state=0)
+train, test = train_test_split(data, test_size=0.2, shuffle=True, random_state=0)
 train.to_csv('data/train.csv', index=False)
 test.to_csv('data/test.csv', index=False)
