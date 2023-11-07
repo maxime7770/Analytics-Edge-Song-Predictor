@@ -1,5 +1,6 @@
 import streamlit as st
 import random
+
 import pandas as pd
 from utils import *
 
@@ -15,8 +16,6 @@ def transform_format(x, list_columns):
     new_sample_df = x.reindex(columns=list_columns, fill_value=0)
 
     pass
-
-
 
 st.set_page_config(layout="wide")
 st.title("Song Popularity Predictor")
@@ -35,6 +34,7 @@ liveliness = st.slider("Liveliness (1-100)", 0, 100, 50, 5)
 expressivity = st.slider("Expressivity (1-100)", 0, 100, 50, 5)
 instrumentalness = st.slider("Instrumentalness (1-100)", 0, 100, 50, 5)
 tempo = st.slider("Tempo (1-100)", 1, 100, 50)
+
 
 # choose the genre among different options
 # options are names of columns that start with 'genre_'
