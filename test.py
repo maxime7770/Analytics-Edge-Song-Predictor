@@ -1,18 +1,10 @@
 import pandas as pd
 
-data = pd.read_csv('data/spotify_data_processed.csv')
+data = pd.read_csv('data/spotify_data.csv')
 
-index = 879020
+# number of rows with 'genre' is 'singer-songwriter'
 
-# drop na 
-data = data.dropna()
+print(data['genre'].value_counts())
 
-print(data.iloc[index]['track_name'])
-
-
-# check is every track name is a string
-for track_name in data['track_name']:
-    if type(track_name) != str:
-        print(track_name)
-        print(type(track_name))
-        break
+# print unique values of genre
+print(data['genre'].unique())
