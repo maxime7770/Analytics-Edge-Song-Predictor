@@ -12,8 +12,9 @@ train_data = pd.read_csv('data/train.csv').drop(['track_name_labels'], axis=1)
 test_data = pd.read_csv('data/test.csv').drop(['track_name_labels'], axis=1)
 
 # drop all columns starting with genre_
-train_data = train_data.drop(train_data.columns[train_data.columns.str.startswith('genre_')], axis=1)
-test_data = test_data.drop(test_data.columns[test_data.columns.str.startswith('genre_')], axis=1)
+# train_data = train_data.drop(train_data.columns[train_data.columns.str.startswith('genre_')], axis=1)
+# test_data = test_data.drop(test_data.columns[test_data.columns.str.startswith('genre_')], axis=1)
+
 
 # change 1, 2, 3... to 0, 1, 2...
 train_data['popularity'] = train_data['popularity'] - 1
@@ -42,7 +43,8 @@ def select_xgboost():
     pickle.dump(best_xgb, open('models_path/xgboost.sav', 'wb'))
     y_pred = best_xgb.predict(test_data.iloc[:, 1:])
 
-    print('Accuracy: ', accuracy_score(test_data.iloc[:, 0], y_pred))
+    print('Accuracy on train: ', accuracy_score(train_data.iloc[:, 0], best_xgb.predict(train_data.iloc[:, 1:])))
+    print('Accuracy on test: ', accuracy_score(test_data.iloc[:, 0], y_pred))
 
     
 
