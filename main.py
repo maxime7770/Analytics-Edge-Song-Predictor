@@ -113,7 +113,7 @@ if st.button("Predict"):
         # fig = shap.force_plot(explainer.expected_value[predicted_popularity_xgb], shap_values[predicted_popularity_xgb], sample, matplotlib=True)
         # st.pyplot(fig, bbox_inches='tight')
 
-        abs_shap_values = abs(shap_values[predicted_popularity_xgb])
+        # abs_shap_values = abs(shap_values[predicted_popularity_xgb])
         # fig, ax = plt.subplots()
         # shap.summary_plot(abs_shap_values, sample, plot_type="bar", show=False)
         # st.pyplot(fig, bbox_inches='tight')
@@ -125,9 +125,12 @@ if st.button("Predict"):
         # shap.summary_plot(shap_values[predicted_popularity_xgb], sample, plot_type="bar", show=False)
         # st.pyplot(fig)
 
-        st.info("Blue features contribute to HIGH popularity, red features contribute to LOW popularity.")
+        st.info('''
+                - Blue features contribute to HIGH popularity (push the model's probability of predicting the observed outcome higher)
+                - Red features contribute to LOW popularity.
+                - f(x) is the XGBoost model's "margin" score for the sample x.''')
         # For the SHAP force plot
-        shap.force_plot(explainer.expected_value[predicted_popularity_xgb], shap_values[predicted_popularity_xgb], sample, matplotlib=True)
+        shap.force_plot(explainer.expected_value[predicted_popularity_xgb-1], shap_values[predicted_popularity_xgb-1], sample, matplotlib=True)
         st.pyplot(bbox_inches='tight')
 
 
