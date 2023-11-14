@@ -95,10 +95,12 @@ data = data[(data['popularity'] <= 40)]
 # shuffle the data
 data = data.sample(frac=1).reset_index(drop=True)
 # for each popularity level, select at most 20k rows
-data = data.groupby('popularity').head(20000)
+data = data.groupby('popularity').head(30000)
 # Create labels ranging from 1 to 10 based on the filtered 'popularity' values
 data['popularity'] = data['popularity'].apply(transform_popularity)
-data = data.groupby('popularity').head(12000)
+data = data.groupby('popularity').head(30000)
+
+print(data['popularity'].value_counts())
 
 # drop all rows where 'genre_songwriter' is equal to 1
 # data = data[data['genre_songwriter'] == 0]
@@ -107,12 +109,12 @@ data = data.groupby('popularity').head(12000)
 
 
 # Save the data
-data.to_csv('data/spotify_data_processed.csv', index=False)
+data.to_csv('data/spotify_data_processed_clustering.csv', index=False)
 
-data = data.drop(['track_name'], axis=1)
+# data = data.drop(['track_name'], axis=1)
 
 
 # split the data into train and test
-train, test = train_test_split(data, test_size=0.2, shuffle=True, random_state=0)
-train.to_csv('data/train.csv', index=False)
-test.to_csv('data/test.csv', index=False)
+# train, test = train_test_split(data, test_size=0.2, shuffle=True, random_state=0)
+# train.to_csv('data/train.csv', index=False)
+# test.to_csv('data/test.csv', index=False)
