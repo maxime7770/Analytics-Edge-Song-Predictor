@@ -1,6 +1,10 @@
 venv/
 data/
+clustering_files/
 __pycache__/
 models_path/
+models_path_regression/
 
 test.py
+
+.DS_Store
