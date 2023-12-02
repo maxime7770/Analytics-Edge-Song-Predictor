@@ -1,8 +1,7 @@
 import pandas as pd
 from sklearn.ensemble import RandomForestClassifier, AdaBoostClassifier, GradientBoostingClassifier
 from sklearn.model_selection import GridSearchCV
-from xgboost import XGBClassifier
-from lightgbm import LGBMClassifier
+from xgboost import XGBClassifier, XGBRegressor
 import pickle
 
 from sklearn.metrics import accuracy_score, f1_score, precision_score, recall_score, confusion_matrix, classification_report, mean_absolute_error
@@ -100,9 +99,3 @@ def select_adaboost():
 # model_randomforest(train_data.iloc[:, 1:], train_data.iloc[:, 0])
 # select_randomforest()
 
-
-rf = pickle.load(open('models_path/xgboost.sav', 'rb'))
-# prediction on the whole dataset
-y_pred = rf.predict(train_data.iloc[:, 1:])
-# summary of the predictions (distribution)
-print(pd.Series(y_pred).value_counts())

@@ -2,7 +2,8 @@ import pickle
 import numpy as np
 import pandas as pd
 import xgboost as xgb 
-
+from sklearn.metrics import accuracy_score, f1_score, precision_score, recall_score, confusion_matrix, classification_report, mean_absolute_error, r2_score
+from sklearn.preprocessing import StandardScaler
 
 def inference_xgboost(path_model, sample):
     ''' Given a new sample, predict its popularity using XGBoost '''
@@ -55,9 +56,6 @@ def inference_knn(path_model, sample, scaler):
     prediction = model.predict(sample)
     return prediction[0]
 
-
-
-
 def ensemble_prediction(list_preds):
     ''' Given a list of predictions (labels between 1 and 10), compute the final prediction '''
     # most frequent prediction
@@ -67,6 +65,21 @@ def ensemble_prediction(list_preds):
         prediction = round(np.mean(list_preds))
     return prediction
 
+def ensemble_prediction_regression(list_preds):
+    ''' Given a list of predictions (labels between 1 and 10), compute the final prediction '''
+    # most frequent prediction
+    prediction = np.mean(list_preds)
+    # round to closest integer
+    prediction = round(prediction)
+    prediction /= 5
+    # if smaller than 0 or larger than 10, choose 0 or 10
+    if prediction < 0:
+        prediction = 0
+    elif prediction > 10:
+        prediction = 10
+    # round again
+    prediction = round(prediction)
+    return prediction
 
 
 def ensemble_model(sample, scaler):
@@ -88,3 +101,44 @@ def ensemble_model(sample, scaler):
     # ensemble the predictions
     prediction = ensemble_prediction([prediction_xgboost, prediction_randomforest, prediction_adaboost, prediction_lasso, prediction_ridge, prediction_knn])
     return prediction
+
+
+def evaluate_ensemble():
+    train_data = pd.read_csv('data/train.csv')
+    scaler = StandardScaler()
+    scaler.fit(train_data.iloc[:, 1:])
+    test_data = pd.read_csv('data/test_regression.csv')
+    y = test_data['popularity']
+    test_data.drop("popularity", axis=1, inplace=True)
+    scaled_test_data = scaler.transform(test_data)
+    #     predicted_popularity_xgb = inference_xgboost('models_path_regression/xgboost_regressor.sav', sample)
+    # predict_popularity_rf = inference_random_forest('models_path_regression/rf_regressor.sav', sample)
+    # predict_popularity_ada = inference_adaboost('models_path_regression/adaboost_regressor.sav', sample)
+    # predicted_popularity_linear = inference_reg_lasso('models_path_regression/linear.sav', sample, scaler)
+    # predicted_popularity_glm_ridge = inference_reg_ridge('models_path_regression/ridgeGLM.sav', sample, scaler)
+    # predicted_popularity_glm = inference_reg_ridge('models_path_regression/glm.sav', sample, scaler)
+    # predicted_popularity_svm = inference_reg_ridge('models_path_regression/full_svm.pkl', sample, scaler)
+    # predicted_popularity_knn = inference_knn('models_path_regression/knnreg_bestk23.sav', sample, scaler)
+    model_xgb = pickle.load(open('models_path_regression/xgboost_regressor.sav', 'rb'))
+    model_rf = pickle.load(open('models_path_regression/rf_regressor.sav', 'rb'))
+    model_ada = pickle.load(open('models_path_regression/adaboost_regressor.sav', 'rb'))
+    model_linear = pickle.load(open('models_path_regression/linear.sav', 'rb'))
+    model_ridge = pickle.load(open('models_path_regression/ridgeGLM.sav', 'rb'))
+    model_glm = pickle.load(open('models_path_regression/glm.sav', 'rb'))
+    model_knn = pickle.load(open('models_path_regression/knnreg_bestk23.sav', 'rb'))
+    pred_xgb = model_xgb.predict(test_data)
+    pred_rf = model_rf.predict(test_data)
+    pred_ada = model_ada.predict(test_data)
+    pred_linear = model_linear.predict(scaled_test_data)
+    pred_ridge = model_ridge.predict(scaled_test_data)
+    pred_glm = model_glm.predict(scaled_test_data)
+    pred_knn = model_knn.predict(scaled_test_data)
+
+    predictions = []
+    for i in range(len(pred_xgb)):
+        predictions.append(np.mean([pred_xgb[i], pred_rf[i], pred_ada[i], pred_linear[i], pred_ridge[i], pred_glm[i], pred_knn[i]]))
+    print('MAE', mean_absolute_error(y, predictions))
+    print('R2', r2_score(y, predictions))
+
+if __name__ == '__main__':
+    evaluate_ensemble()

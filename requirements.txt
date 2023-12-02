@@ -3,3 +3,4 @@ xgboost
 lightgbm
 scikit-learn
 sentence-transformers
+htbuilder
