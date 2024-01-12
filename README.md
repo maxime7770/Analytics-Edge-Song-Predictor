@@ -1,5 +1,7 @@
 # Analytics-Edge
 
+This project was developed as part of the Advanced Analytics Edge class at MIT. It is a collaborative effort by team members Maxime Wolf, Sanya Chauhan, Vidushi Gupta, and Xidan Xu.
+
 https://github.com/maxime7770/Analytics-Edge/assets/58089609/c75f0fce-b9b4-4ce9-bf39-c60735d04416
 
 ## Problem
