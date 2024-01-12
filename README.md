@@ -1,5 +1,7 @@
 # Analytics-Edge
 
+https://github.com/maxime7770/Analytics-Edge/assets/58089609/c75f0fce-b9b4-4ce9-bf39-c60735d04416
+
 ## Problem
 
 In the contemporary music industry, aspiring artists face a challenging dilemma: predicting the potential popularity of their songs before releasing them. To address this issue, this project aims to leverage Spotify data and song attributes to assist artists in gauging the likelihood of their songs becoming popular and to compare them alongside songs with similar attributes. Also, this project revolves around song recommendation based on song features such as danceability, tempo, and musical characteristics. The problem we seek to solve is how to efficiently group songs into clusters using these intrinsic song features and recommend songs to users who prefer specific musical attributes. 
