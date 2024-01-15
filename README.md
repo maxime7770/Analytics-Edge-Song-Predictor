@@ -1,6 +1,6 @@
-# Analytics-Edge
+# Analytics Edge Project: Predicting Spotify Songs Popularity
 
-This project was developed as part of the Advanced Analytics Edge class at MIT. It is a collaborative effort by team members Maxime Wolf, Sanya Chauhan, Vidushi Gupta, and Xidan Xu.
+This project was developed as part of the Advanced Analytics Edge class at MIT. It is a collaborative effort by team members [Maxime Wolf](https://www.linkedin.com/in/maxime-wolf/), [Sanya Chauhan](https://www.linkedin.com/in/sanya-chauhan/), [Vidushi Gupta](https://www.linkedin.com/in/vidushi-gupta07/), and [Xidan Xu](https://www.linkedin.com/in/xidan-xu/)
 
 https://github.com/maxime7770/Analytics-Edge/assets/58089609/c75f0fce-b9b4-4ce9-bf39-c60735d04416
 
