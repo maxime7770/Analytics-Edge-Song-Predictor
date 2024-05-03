@@ -7,3 +7,4 @@ htbuilder
 shap
 matplotlib
 torch
+seaborn
