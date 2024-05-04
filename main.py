@@ -144,7 +144,7 @@ if st.button("Predict"):
         - KNN: {round(predicted_popularity_knn / 5, 2) }
         """)
 
-    with st.expander("Feature importance"):
+    with st.expander("Feature importance - XGBoost"):
         model = pickle.load(open('models_path_regression/xgboost_regressor.sav', 'rb'))
         explainer = shap.TreeExplainer(model)
         shap_values = explainer.shap_values(sample)

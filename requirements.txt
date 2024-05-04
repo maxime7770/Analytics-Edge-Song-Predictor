@@ -7,3 +7,5 @@ htbuilder
 shap
 matplotlib
 torch
+seaborn
+plotly
